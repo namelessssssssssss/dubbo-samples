@@ -40,7 +40,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <dubbo.version>3.3.0-beta.1</dubbo.version>
+        <dubbo.version>3.3.0-beta.2-METADATA-SERVICE-V2</dubbo.version>
         <spring-boot.version>2.7.8</spring-boot.version>
     </properties>
 
@@ -52,6 +52,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.25.2</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -103,6 +108,44 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>kr.motd.maven</groupId>
+                    <artifactId>os-maven-plugin</artifactId>
+                    <version>${maven_os_plugin_version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>detect</goal>
+                            </goals>
+                            <phase>initialize</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.xolstice.maven.plugins</groupId>
+                    <artifactId>protobuf-maven-plugin</artifactId>
+                    <version>${maven_protobuf_plugin_version}</version>
+                    <configuration>
+                        <protocArtifact>com.google.protobuf:protoc:${protobuf-protoc_version}:exe:${os.detected.classifier}</protocArtifact>
+                        <protocPlugins>
+                            <protocPlugin>
+                                <id>dubbo</id>
+                                <groupId>org.apache.dubbo</groupId>
+                                <artifactId>dubbo-compiler</artifactId>
+                                <version>${project.parent.version}</version>
+                                <mainClass>org.apache.dubbo.gen.tri.Dubbo3TripleGenerator</mainClass>
+                            </protocPlugin>
+                        </protocPlugins>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>

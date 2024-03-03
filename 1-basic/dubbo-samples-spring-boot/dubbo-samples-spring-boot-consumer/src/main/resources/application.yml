@@ -16,6 +16,11 @@
 
 dubbo:
   application:
-    name: dubbo-springboot-demo-consumer
+      name: dubbo-springboot-demo-consumer
+      qos-enable: false
+  protocol:
+      name: tri
+      host: 127.0.0.1
+
   registry:
     address: zookeeper://${zookeeper.address:127.0.0.1}:2181
